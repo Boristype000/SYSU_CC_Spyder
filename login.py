@@ -1,7 +1,8 @@
-# 实现登陆
+# ʵ�ֵ�½
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import requests
+import time
 
 
 def login():
@@ -26,12 +27,22 @@ def login():
 def loginGet():
 
     driver = login()
-
     idUrl = driver.current_url[0:55]
 
     source_code = requests.get(
         idUrl + "/Management_Demand/JOL_Require/Admin/RequireManage.aspx").text
 
+    elem_need = driver.find_element_by_id("ctl00_leftfuncbar_TreeView1t15")
+    elem_need.click()
+
+    source_code_2 = None
+
+    if(driver.find_element_by_link_text("2")):
+        elem_next_page = driver.find_element_by_link_text("2")
+        elem_next_page.click()
+        time.sleep(5)
+        source_code_2 = driver.page_source
+        #driver.find_element_by_xpath("//*")
     driver.close()
     driver.quit()
-    return [source_code, idUrl]
+    return [source_code, source_code_2, idUrl]
